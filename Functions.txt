@@ -1,0 +1,56 @@
+En funktion som simulerar ett skott:
+
+# ----------------------------------
+# Function to simulate the projectile motion of a shot
+def simulate_projectile(x0, y0, angle_in_degrees, power, terrain, screen_width=800, screen_height=600):
+    # Convert angle to radians
+    angle_rad = math.radians(angle_in_degrees)
+    # Initial velocities
+    vx = power * math.cos(angle_rad)
+    vy = -power * math.sin(angle_rad)  # Negative because y increases downward
+    # Gravity
+    gravity = 9.8 * 2  # Adjusted gravity for game effect
+    # Time increment
+    dt = 0.1
+    # Initial position
+    x = x0
+    y = y0
+    # Simulate motion
+    while 0 <= x <= screen_width and 0 <= y <= screen_height:
+        # Update position
+        x += vx * dt
+        vy += gravity * dt
+        y += vy * dt
+        # Check collision with terrain
+        terrain_y = get_terrain_height_at_x(terrain, x)
+        if y >= terrain_y:
+            # Projectile has hit the terrain
+            # For landing point, use x, terrain_y
+            return x, terrain_y
+    # If the projectile goes off-screen without hitting the terrain
+    return x, y
+
+# ----------------------------------
+
+
+Exempel på hur man använder:
+
+# ----------------------------------
+
+result_x, result_y = simulate_projectile(100, 200, -40, 120, terrain)
+
+# ----------------------------------
+
+Resultatet är en position, alltså koordinater på vart skottet landar.
+
+
+
+För att räkna ut avstånd, kan man använda sig av Pytagoras sats. I Python ser det ut såhär:
+
+# ----------------------------------
+
+distance = math.hypot(enemy_x - result_x, enemy_y - result_y)
+
+# ----------------------------------
+
+Koden ovan räknar ut avståndet mellan fienden och vart det simulerade skottet landar.
